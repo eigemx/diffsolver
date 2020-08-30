@@ -1,0 +1,39 @@
+{
+  "frontFace": {
+    "type": "empty",
+    "nFaces": 2075,
+    "startFace": 4046
+  },
+  "backFace": {
+    "type": "empty",
+    "nFaces": 2075,
+    "startFace": 6329
+  },
+  "symmetry": {
+    "type": "symmetry",
+    "nFaces": 54,
+    "startFace": 6148
+  },
+  "left": {
+    "type": "insulated",
+    "nFaces": 27,
+    "startFace": 6121
+  },
+  "right": {
+    "type": "insulated",
+    "nFaces": 27,
+    "startFace": 6277
+  },
+  "upperWall": {
+    "type": "fixed",
+    "nFaces": 25,
+    "startFace": 6304,
+    "T": 300
+  },
+  "wedge": {
+    "type": "fixed",
+    "nFaces": 75,
+    "startFace": 6202,
+    "T": 900
+  }
+}

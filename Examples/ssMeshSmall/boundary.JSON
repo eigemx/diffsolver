@@ -1,0 +1,34 @@
+{
+    "lowerWall": {
+        "nFaces": 10,
+        "startFace": 180,
+        "type": "fixed",
+        "T": 300
+    },
+
+    "upperWall": {
+        "nFaces": 10,
+        "startFace": 190,
+        "type": "fixed",
+        "T": 800
+    },
+
+    "leftInsulatedWall": {
+        "nFaces": 10,
+        "startFace": 200,
+        "type": "insulated"
+    },
+
+    "rightInsulatedWall": {
+        "nFaces": 10,
+        "startFace": 210,
+        "type": "insulated"
+    },
+
+    "frontAndBack":
+    {
+        "nFaces": 200,
+        "startFace": 220,
+        "type": "empty"
+    }
+}

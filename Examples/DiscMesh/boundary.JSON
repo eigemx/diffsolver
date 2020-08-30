@@ -1,0 +1,28 @@
+{
+    "Back": 
+    {
+        "type": "empty",
+        "nFaces": 9280,
+        "startFace": 13646
+    },
+    "Inner": 
+    {
+        "type": "fixed",
+        "nFaces": 122,
+        "startFace": 22926,
+        "T": 600
+    },
+    "Outer": 
+    {
+        "type": "fixed",
+        "nFaces": 426,
+        "startFace": 23048,
+        "T": 900
+    },
+    "Front": 
+    {
+        "type": "empty",
+        "nFaces": 9280,
+        "startFace": 23474
+    }
+}

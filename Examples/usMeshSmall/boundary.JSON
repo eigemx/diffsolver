@@ -1,0 +1,39 @@
+{
+  "back": {
+    "type": "empty",
+    "nFaces": 942,
+    "startFace": 1373
+  },
+
+  "front": {
+    "type": "empty",
+    "nFaces": 942,
+    "startFace": 2395
+  },
+
+  "topWall": {
+    "type": "fixed",
+    "nFaces": 20,
+    "startFace": 2315,
+    "T": 800
+  },
+
+  "bottomWall": {
+    "type": "fixed",
+    "nFaces": 20,
+    "startFace": 2335,
+    "T": 300
+  },
+
+  "rightWall": {
+    "type": "insulated",
+    "nFaces": 20,
+    "startFace": 2355
+  },
+
+  "leftWall": {
+    "type": "insulated",
+    "nFaces": 20,
+    "startFace": 2375
+  }
+}

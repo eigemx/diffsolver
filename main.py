@@ -4,7 +4,7 @@ import mesh
 import quality
 
 if __name__ == '__main__':
-    MESH_DIR = 'DiscMesh/'
+    MESH_DIR = 'Examples/DiscMesh/'
     BOUNDARY_DICT = boundary.BoundaryDict(MESH_DIR + 'boundary.JSON')
 
     mesh = mesh.Mesh(MESH_DIR, BOUNDARY_DICT)
