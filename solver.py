@@ -8,7 +8,6 @@ from common import info
 
 class StructuredSolver:
     def __init__(self, _mesh):
-        # Read mesh
         self.mesh = _mesh
         self.cells_count = len(self.mesh.cells)
 
@@ -106,7 +105,7 @@ class UnstructuredSolver(StructuredSolver):
         super().__init__(_mesh)
         self.gradients = np.zeros((self.cells_count, 3))
 
-    def handle_interior_face(self, cell: fvm.Cell, face: fvm.Face):
+    def handle_interior_face(self, cell: mesh.Cell, face: mesh.Face):
         # ** Orthogonal-like contribution.
         # Get the adjacent cell sharing the face
         adj_cell_id, adj_cell = self.mesh.adjacent_cell(cell, face)
@@ -175,8 +174,9 @@ class UnstructuredSolver(StructuredSolver):
         self.gradients[cell.cell_id] = grad
         return grad
 
+    # applies over-relaxed correction due to grid non-orthogonality
     @staticmethod
-    def over_relaxed_correction(cell: fvm.Cell, face: fvm.Face, adj_cell: fvm.Cell=None):
+    def over_relaxed_correction(cell: mesh.Cell, face: mesh.Face, adj_cell: mesh.Cell=None):
         Sf = face.normal if face in cell.owner else -face.normal
 
         if adj_cell is None:
@@ -184,6 +184,8 @@ class UnstructuredSolver(StructuredSolver):
         else:
             e = adj_cell.center - cell.center
 
+        # make sure that e (vector joining cells centroids or cell and boundary face centroids) isn't in the opposite
+        # direction to Sf (face normal).
         if np.dot(Sf, e) < 0:
             e = -e
 
@@ -195,6 +197,7 @@ class UnstructuredSolver(StructuredSolver):
 
         return Sf, Ef, Ef_mag, e, e_mag
 
+    # writes temperature distribution to OpenFOAM format file.
     def results_to_foam(self):
         with open('T', 'w') as fd:
             fd.write('dimensions      0 0 0 1 0 0 0;\n')
