@@ -21,19 +21,20 @@ class StructuredSolver:
         self.b = 0.0
 
     # Gauss-Seidel solver.
-    def solve(self, it=100, eps=0.001):
+    def solve(self, it=100, e=0.001):
         for i in range(it):
-            # Copy the temperature vector before each iteration to do the following:
-            #   1) Calculate the average temperature residuals.
-            #   2) Check the stoping criteria using np.allclose()
             T_old = self.T.copy()
 
             self.visit_cells()
+            
+            # Maximum normalized difference of temperature between two consecutive iterations.
+            eps = np.max(((self.T - T_old) / self.T)) * 100
 
-            info(f'Iteration no.: {i}, Average temperature residuals = {np.average(np.abs(T_old - self.T)):e}')
+            info(f'Iteration no.: {i}, Maximum normalized difference of temperature = {eps:e}')
 
-            # Stopping criteria, if `eps` is acheived.
-            if np.allclose(self.T, T_old, eps):
+            # Stopping criteria: if `e` is acheived, return.
+            if eps <= e:
+                info('Stopping criteria achieved. Solution converged.')
                 return
 
     # Loops over every cell in the mesh and initializes discretized equation coeffecients
