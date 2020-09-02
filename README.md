@@ -41,6 +41,6 @@ Unstructured non-orthogonal disc mesh with two fixed temperature boundary condit
       
         # Run solver.
         s = solver.UnstructuredSolver(mesh)
-        s.solve(it=250, eps=0.00001)
+        s.solve(it=2500, eps=0.00001)
 
         s.results_to_foam()
