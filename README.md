@@ -27,7 +27,7 @@ Unstructured non-orthogonal disc mesh with two fixed temperature boundary condit
 
     if __name__ == '__main__':
         # Directory containing modified-OpenFOAM mesh.
-        MESH_DIR = 'DiscMesh/'
+        MESH_DIR = 'Examples/DiscMesh/'
     
         # Boundary JSON dictionary.
         BOUNDARY_DICT = boundary.BoundaryDict(MESH_DIR + 'boundary.JSON')
