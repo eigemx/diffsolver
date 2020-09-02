@@ -1,7 +1,7 @@
 # diffsolver
 Finite volume diffusion equation solver for structured/unstructured modified-OpenFOAM meshes.
 
-diffsolver uses a modified version of OpenFOAM mesh (as can be found in 'test_mesh' folder), and a `boundary.JSON` file that describes boundary regions. The solver can work with orthogonal structured meshes using `solver.StructuredSolver()` and non-orthogonal unstructured meshes using `solver.UnstructuredSolver()`
+diffsolver uses a modified version of OpenFOAM mesh (as can be found in `Examples` folder), and a `boundary.JSON` file that describes boundary regions. The solver can work with orthogonal structured meshes using `solver.StructuredSolver()` and non-orthogonal unstructured meshes using `solver.UnstructuredSolver()`
 
 Currently supported boundary types: fixed (Drichlet boundary condition) and insulated (zero-gradient Neumann boundary condition).
 
