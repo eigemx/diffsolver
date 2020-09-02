@@ -14,6 +14,8 @@ class StructuredSolver:
         # Temperature of each cell, located at the centroid.
         self.T = np.ones((self.cells_count, 1)) * 500.0
 
+        self.gradients = np.zeros_like(self.T)
+
         # The discretized diffusion equation is in the form: a_c*T_c + Sigma(a_F*T_F) = b
         # The following variables will hold a_c and b coefficients for the discretized equation applied to each cell.
         self.a_c = 0.0
@@ -21,19 +23,20 @@ class StructuredSolver:
         self.b = 0.0
 
     # Gauss-Seidel solver.
-    def solve(self, it=100, eps=0.001):
+    def solve(self, it=100, e=0.001):
         for i in range(it):
-            # Copy the temperature vector before each iteration to do the following:
-            #   1) Calculate the average temperature residuals.
-            #   2) Check the stoping criteria using np.allclose()
-            T_old = self.T.copy()
+            self.T_old = self.T.copy()
 
             self.visit_cells()
 
-            info(f'Iteration no.: {i}, Average temperature residuals = {np.average(np.abs(T_old - self.T)):e}')
+            # Maximum normalized difference of temperature between two consecutive iterations.
+            eps = np.max(((self.T - self.T_old) / self.T)) * 100
 
-            # Stopping criteria, if `eps` is acheived.
-            if np.allclose(self.T, T_old, eps):
+            info(f'Iteration no.: {i}, Maximum normalized difference of temperature = {eps:e}')
+
+            # Stopping criteria: if `e` is acheived, return.
+            if eps <= e:
+                info('Stopping criteria achieved. Solution converged.')
                 return
 
     # Loops over every cell in the mesh and initializes discretized equation coeffecients
@@ -54,7 +57,8 @@ class StructuredSolver:
 
     # Applies the discretized equation to each cell and updates cell temperature value.
     def apply_discretize_eqn(self, cell_id):
-        self.T[cell_id] = (self.afTf + self.b) / self.a_c
+        w = 0.8
+        self.T[cell_id] = ((1 - w) * self.T_old[cell_id]) + (w * ((self.afTf + self.b) / self.a_c))
 
     def handle_interior_face(self, cell: mesh.Cell, face: mesh.Face):
         # Get the adjacent cell sharing the face
@@ -165,10 +169,20 @@ class UnstructuredSolver(StructuredSolver):
                 # calculate the temperature of interior face by interpolating adjacent cells temperatures.
                 # get adjacent cell sharing the face
                 adj_cell_id, adj_cell = self.mesh.adjacent_cell(cell, face)
-                gc, gf = self.mesh.weight_factors(cell, adj_cell, face)
-                face_temp = (gc * self.T[cell.cell_id]) + (gf * self.T[adj_cell_id])
 
-                grad += face_temp * Sf
+                # gradient computation without skewness correction.
+                # gc, gf = self.mesh.weight_factors(cell, adj_cell, face)
+                # face_temp = (gc * self.T[cell.cell_id]) + (gf * self.T[adj_cell_id])
+
+                # skewness correction
+                face_temp = 0.5 * (self.T[cell.cell_id] + self.T[adj_cell_id])
+                face_temp_corrected = face_temp + (
+                        0.5 * np.dot(
+                                self.gradients[cell.cell_id] + self.gradients[adj_cell_id],
+                                face.center - (0.5 * (cell.center + adj_cell.center)))
+                )
+
+                grad += face_temp_corrected * Sf
 
         grad = grad / cell_volume
         self.gradients[cell.cell_id] = grad
@@ -197,13 +211,21 @@ class UnstructuredSolver(StructuredSolver):
 
         return Sf, Ef, Ef_mag, e, e_mag
 
-    # writes temperature distribution to OpenFOAM format file.
+    # writes cells temperature scalar field to FoamFile.
     def results_to_foam(self):
         with open('T', 'w') as fd:
+            header_string = 'FoamFile {\n' + \
+                            '\tversion     2.0;\n' + \
+                            '\tformat      ascii;\n' + \
+                            '\tclass       volScalarField;\n' + \
+                            '\tlocation    "100";\n' + \
+                            '\tobject      T;\n' + \
+                            '}\n\n'
+            fd.write(header_string)
             fd.write('dimensions      0 0 0 1 0 0 0;\n')
             fd.write('internalField   nonuniform List<scalar>\n')
             fd.write(f'{self.cells_count}\n')
             fd.write('(\n')
             for T in self.T:
                 fd.write(f'{str(T[0])}\n')
-            fd.write(')\n')
+            fd.write(')\n;\n')

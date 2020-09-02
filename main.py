@@ -4,7 +4,7 @@ import mesh
 import quality
 
 if __name__ == '__main__':
-    MESH_DIR = 'Examples/DiscMesh/'
+    MESH_DIR = 'usMeshSmall/'
     BOUNDARY_DICT = boundary.BoundaryDict(MESH_DIR + 'boundary.JSON')
 
     mesh = mesh.Mesh(MESH_DIR, BOUNDARY_DICT)
@@ -12,6 +12,6 @@ if __name__ == '__main__':
     q.print_stats()
 
     s = solver.UnstructuredSolver(mesh)
-    s.solve(it=250, eps=0.00001)
+    s.solve(it=2500, e=0.00001)
 
     s.results_to_foam()
