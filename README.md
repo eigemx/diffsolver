@@ -7,7 +7,16 @@ Currently supported boundary types: fixed (Drichlet boundary condition) and insu
 
 diffsolver is based on "Chapter 8 - Spatial discretization of diffusion term" in "The Finite Volume Method in Computational Fluid Dynamics" by Moukalled et al.
 
-## Example
+## Selected Solver Results
+
+Unstructured non-orthogonal rectangular mesh with two fixed temperature boundary conditions and two insulated walls (left, right), mesh can be found in `Examples\usSmall`
+![Image of rectangular mesh](https://github.com/EigenEmara/diffsolver/blob/master/Examples/recatgular_mesh.png)
+
+Unstructured non-orthogonal disc mesh with two fixed temperature boundary conditions (inner and outer rings), mesh can be found in `Examples\DiscMesh`
+![Image of rectangular mesh](https://github.com/EigenEmara/diffsolver/blob/master/Examples/disc_mesh.png)
+
+
+## Code Example
     import boundary
     import solver
     import mesh
