@@ -4,7 +4,7 @@ import numpy as np
 class Quality:
     def __init__(self, mesh):
         self.mesh = mesh
-        self.thetas = list()        # ِ A list of angles of non-orthogonality
+        self.thetas = list()        # ِA list of angles of non-orthogonality
         self.vol = list()           # Cell volumes
         self.face_areas = list()    # Face areas
         self.face_aspect = list()   # A list of faces aspect ratio.
